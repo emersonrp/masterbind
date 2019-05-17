@@ -9,7 +9,7 @@ from module.General import General
 #from module.SimpleBinds import SimpleBinds
 from module.SoD import SoD
 from module.TeamPetSelect import TeamPetSelect
-#from module.TypingMsg import TypingMsg
+from module.ChatBinds import ChatBinds
 
 class Profile(wx.Notebook):
     def __init__(self, parent):
@@ -25,7 +25,7 @@ class Profile(wx.Notebook):
         self.TeamPetSelect     = TeamPetSelect(self)
         # self.InspirationPopper = InspirationPopper(self)
         # self.MasterMind        = Mastermind(self)
-        # self.TypeingMsg        = TypingMsg(self)
+        self.ChatBinds        = ChatBinds(self)
         # self.SimpleBinds       = SimpleBinds(self)
         # self.BufferBinds       = BufferBinds(self)
         # self.ComplexBinds      = ComplexBinds(self)

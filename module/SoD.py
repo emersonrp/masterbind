@@ -11,77 +11,74 @@ class SoD(Module):
         Module.__init__(self, parent, 'SoD')
 
     def InitKeys(self):
+        self.Data = {
+            'Up' : "SPACE",
+            'Down' : "X",
+            'Forward' : "W",
+            'Back' : "S",
+            'Left' : "A",
+            'Right' : "D",
+            'TurnLeft' : "Q",
+            'TurnRight' : "E",
+            'AutoRun' : "R",
+            'Follow' : "TILDE",
+            'DefaultMode' : '',
+            'MousechordSoD' : 1,
+            'AutoMouseLook' : 0,
 
-        if not self.Data:
-            self.Data = {
-                'Up' : "SPACE",
-                'Down' : "X",
-                'Forward' : "W",
-                'Back' : "S",
-                'Left' : "A",
-                'Right' : "D",
-                'TurnLeft' : "Q",
-                'TurnRight' : "E",
-                'AutoRun' : "R",
-                'Follow' : "TILDE",
-                'DefaultMode' : '',
-                'MousechordSoD' : 1,
-                'AutoMouseLook' : 0,
+            'SprintPower' : 'Sprint',
 
-                'SprintPower' : 'Sprint',
+            'ChangeCamera' : 1,
+            'CamdistBase' : 15,
+            'CamdistTravelling' : 60,
 
-                'ChangeCamera' : 1,
-                'CamdistBase' : 15,
-                'CamdistTravelling' : 60,
+            'ChangeDetail' : 1,
+            'DetailBase' : 100,
+            'DetailTravelling' : 50,
 
-                'ChangeDetail' : 1,
-                'DetailBase' : 100,
-                'DetailTravelling' : 50,
+            'NonSoDMode' : 1,
+            'ToggleSoD' : 'CTRL-M',
+            'JumpMode' : "T",
+            'SimpleSJCJ' : 1,
 
-                'NonSoDMode' : 1,
-                'ToggleSoD' : 'CTRL-M',
-                'JumpMode' : "T",
-                'SimpleSJCJ' : 1,
+            'RunMode' : "C",
+            'SSOnlyWhenMoving' : 0,
+            'SSSJModeEnable' : 1,
 
-                'RunMode' : "C",
-                'SSOnlyWhenMoving' : 0,
-                'SSSJModeEnable' : 1,
+            'FlyMode' : "F",
+            'GFlyMode' : "G",
 
-                'FlyMode' : "F",
-                'GFlyMode' : "G",
+            'SelfTellOnChange' : 1,
 
-                'SelfTellOnChange' : 1,
+            'TPMode' : 'SHIFT-LBUTTON',
+            'TPCombo' : 'SHIFT',
+            'TPReset' : 'CTRL-T',
 
-                'TPMode' : 'SHIFT-LBUTTON',
-                'TPCombo' : 'SHIFT',
-                'TPReset' : 'CTRL-T',
+            'TTPMode' : 'SHIFT-CTRL-LBUTTON',
+            'TTPCombo' : 'SHIFT-CTRL',
+            'TTPReset' : 'SHIFT-CTRL-T',
 
-                'TTPMode' : 'SHIFT-CTRL-LBUTTON',
-                'TTPCombo' : 'SHIFT-CTRL',
-                'TTPReset' : 'SHIFT-CTRL-T',
+            'AutoHoverTP' : 1,
+            'HideWinsDuringTP' : 1,
+            'AutoGFlyTTP' : 1,
 
-                'AutoHoverTP' : 1,
-                'HideWinsDuringTP' : 1,
-                'AutoGFlyTTP' : 1,
+            'RunPrimary' : "Super Speed",
+            'RunPrimaryNumber' : 2,
+            'RunSecondary' : "Sprint",
+            'RunSecondaryNumber' : 1,
+            'FlyHover' : 1,
+            'FlyFly' : '',
+            'FlyGFly' : '',
+            'Unqueue' : 1,
+            'ToggleSoD' : "CTRL+M",
+            'Enable' : None,
 
-                'RunPrimary' : "Super Speed",
-                'RunPrimaryNumber' : 2,
-                'RunSecondary' : "Sprint",
-                'RunSecondaryNumber' : 1,
-                'FlyHover' : 1,
-                'FlyFly' : '',
-                'FlyGFly' : '',
-                'Unqueue' : 1,
-                'ToggleSoD' : "CTRL+M",
-                'Enable' : None,
+            'NovaMode' : 'T',
+            'NovaTray' : 4,
 
-                'NovaMode' : 'T',
-                'NovaTray' : 4,
-
-                'DwarfMode' : 'G',
-                'DwarfTray' : 5,
-            }
-
+            'DwarfMode' : 'G',
+            'DwarfTray' : 5,
+        }
 
         if self.Profile.General.Data['Archetype'] == "Peacebringer":
             self.Data['NovaNova'] = "Bright Nova"

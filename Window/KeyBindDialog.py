@@ -27,9 +27,13 @@ class KeyBindDialog(wx.Dialog):
                 style = wx.ALIGN_CENTER_HORIZONTAL|wx.ST_NO_AUTORESIZE|wx.BORDER_SIMPLE)
 
         buttonsizer = wx.BoxSizer(wx.HORIZONTAL)
-        buttonsizer.Add( wx.Button(self, wx.CANCEL, label = "Cancel"), wx.EXPAND )
-        buttonsizer.Add( wx.Button(self, wx.NO,     label = "Clear Bind") , wx.EXPAND )
-        buttonsizer.Add( wx.Button(self, wx.OK,     label = "Accept"), wx.EXPAND )
+        cancel_btn = wx.Button(self, wx.CANCEL, label = "Cancel")
+        clear_btn  = wx.Button(self, wx.NO,     label = "Clear Bind")
+        accept_btn = wx.Button(self, wx.OK,     label = "Accept")
+
+        buttonsizer.Add( cancel_btn, wx.EXPAND )
+        buttonsizer.Add( clear_btn,  wx.EXPAND )
+        buttonsizer.Add( accept_btn, wx.EXPAND )
         buttonsizer.Layout()
 
         sizer.Add( self.kbdesc, 0, wx.ALIGN_CENTER|wx.EXPAND|wx.ALL, 5 )
@@ -41,6 +45,15 @@ class KeyBindDialog(wx.Dialog):
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(sizer, 0, wx.ALL, 10)
 
+        self.SetSizerAndFit(vbox)
+
+        # Add some events etc.
+        accept_btn.SetFocus()
+
+        accept_btn.Bind(wx.EVT_BUTTON, self.doAccept)
+        cancel_btn.Bind(wx.EVT_BUTTON, self.doCancel)
+        clear_btn.Bind (wx.EVT_BUTTON, self.doClear)
+
         self.Bind(wx.EVT_CHAR_HOOK, self.handleBind)
 
         for e in (wx.EVT_LEFT_DOWN, wx.EVT_MIDDLE_DOWN, wx.EVT_RIGHT_DOWN, wx.EVT_MOUSE_AUX1_DOWN, wx.EVT_MOUSE_AUX2_DOWN):
@@ -48,8 +61,14 @@ class KeyBindDialog(wx.Dialog):
             self.kbkeys.Bind(e, self.handleBind)
             self.kbdesc.Bind(e, self.handleBind)
 
-        self.SetSizerAndFit(vbox)
 
+    def doAccept(self, evt = None): self.EndModal(wx.OK)
+
+    def doCancel(self, evt = None): self.EndModal(wx.CANCEL)
+
+    def doClear(self, evt = None):
+        self.kbkeys.Disable()
+        self.kbkeys.SetLabel("DISABLED")
 
     def handleBind(self, evt):
         KeyToBind = ''
@@ -59,7 +78,7 @@ class KeyBindDialog(wx.Dialog):
             code = evt.GetKeyCode()
             # press escape to cancel
             if (code == wx.WXK_ESCAPE):
-                self.EndModal(wx.CANCEL)
+                self.doCancel()
                 return
 
             if code not in (wx.WXK_SHIFT, wx.WXK_CONTROL, wx.WXK_ALT, wx.WXK_WINDOWS_LEFT, wx.WXK_WINDOWS_RIGHT):
@@ -76,6 +95,7 @@ class KeyBindDialog(wx.Dialog):
             KeyToBind = self.buttons[evt.GetButton()]
             evt.Skip()
 
+        self.kbkeys.Enable()
         # check for each modifier key
         if (evt.ControlDown()): binding = binding + 'CTRL-'
         if (evt.AltDown())    : binding = binding + 'ALT-'
@@ -83,7 +103,9 @@ class KeyBindDialog(wx.Dialog):
 
         binding = binding + KeyToBind
 
-        if binding: self.kbkeys.SetLabel(binding)
+        if binding:
+            self.kbkeys.SetLabel(binding)
+            self.kbkeys.Enable()
 
     # This keymap code was adapted from PADRE < http://padre.perlide.org/ >.
     def GetKeymap(self):

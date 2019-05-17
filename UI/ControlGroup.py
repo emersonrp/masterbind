@@ -79,7 +79,7 @@ class ControlGroup(wx.StaticBoxSizer):
         with KeyBindDialog(self, button) as pickerdlg:
 
             if pickerdlg.ShowModal() == wx.OK:
-                newKey = pickerdlg.kbfeed.GetLabel()
+                newKey = pickerdlg.kbkeys.GetLabel()
                 value  = button.MasterBindValName
 
                 # TODO -- check for conflicts

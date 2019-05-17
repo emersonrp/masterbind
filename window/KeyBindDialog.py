@@ -5,7 +5,16 @@ class KeyBindDialog(wx.Dialog):
     def __init__(self, parent, button):
         wx.Dialog.__init__(self, None, title = "Select Key For Bind")
 
-        self.parent = parent
+        self.parent  = parent
+        self.keymap  = self.GetKeymap()
+        self.buttons = [
+                '', # 'button zero'
+                'LBUTTON',
+                'MBUTTON',
+                'RBUTTON',
+                'BUTTON4',
+                'BUTTON5',
+            ]
 
         # Create sizer that will host all controls
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -16,68 +25,63 @@ class KeyBindDialog(wx.Dialog):
         self.cancel = wx.StaticText(self, label = "(Escape to cancel)" )
         self.kbfeed = wx.StaticText(self, label = button.GetLabel(), style = wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
 
-        sizer.Add( self.kbdesc, 0, wx.ALIGN_CENTER )
-        sizer.Add( self.cancel, 0, wx.ALIGN_CENTER )
-        sizer.Add( self.kbfeed, 1, wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
+
+        buttonsizer = wx.BoxSizer(wx.HORIZONTAL)
+        buttonsizer.Add( wx.Button(self, wx.CANCEL, label = "Cancel"), wx.EXPAND )
+        buttonsizer.Add( wx.Button(self, wx.NO,     label = "Clear") , wx.EXPAND )
+        buttonsizer.Add( wx.Button(self, wx.OK,     label = "Accept"), wx.EXPAND )
+        buttonsizer.Layout()
+
+        sizer.Add( self.kbdesc, 0, wx.ALIGN_CENTER|wx.ALL , 5 )
+        sizer.Add( self.cancel, 0, wx.ALIGN_CENTER|wx.ALL , 5 )
+        sizer.Add( self.kbfeed, 1, wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND|wx.ALL, 5 )
+        #sizer.AddSeparator()
+        sizer.Add( buttonsizer, 1, wx.EXPAND|wx.ALL, 5 )
 
         # Wrap everything in a vbox to add some padding
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(sizer, 0, wx.ALL, 10)
 
-        self.Bind(wx.EVT_KEY_DOWN , self.handleBind , self)
-        self.Bind(wx.EVT_CHAR     , self.handleBind , self)
-
-        self.Bind(wx.EVT_LEFT_DOWN       , self.handleBind , self)
-        self.Bind(wx.EVT_MIDDLE_DOWN     , self.handleBind , self)
-        self.Bind(wx.EVT_RIGHT_DOWN      , self.handleBind , self)
-        self.Bind(wx.EVT_MOUSE_AUX1_DOWN , self.handleBind , self)
-        self.Bind(wx.EVT_MOUSE_AUX2_DOWN , self.handleBind , self)
+        self.Bind(wx.EVT_CHAR_HOOK       , self.handleBind)
+        self.Bind(wx.EVT_LEFT_DOWN       , self.handleBind)
+        self.Bind(wx.EVT_MIDDLE_DOWN     , self.handleBind)
+        self.Bind(wx.EVT_RIGHT_DOWN      , self.handleBind)
+        self.Bind(wx.EVT_MOUSE_AUX1_DOWN , self.handleBind)
+        self.Bind(wx.EVT_MOUSE_AUX2_DOWN , self.handleBind)
 
         self.SetSizerAndFit(vbox)
-        self.SetKeymap()
 
     # Private method to handle on character pressed event
     def handleBind(self, evt):
-        evtType = evt.GetEventType()
-        print("Got event at all")
-        if (evtType == wx.EVT_KEY_DOWN):
+        KeyToBind = ''
+        binding = ''
+
+        if (isinstance(evt, wx.KeyEvent)):
             code = evt.GetKeyCode()
             # press escape to cancel
-            print(f"Got a key code {code}")
-            if (code == WXK_ESCAPE):
+            if (code == wx.WXK_ESCAPE):
                 self.EndModal(wx.CANCEL)
+                return
 
-            KeyToBind = self.keymap[code]
+            if code not in (wx.WXK_SHIFT, wx.WXK_CONTROL, wx.WXK_ALT, wx.WXK_WINDOWS_LEFT, wx.WXK_WINDOWS_RIGHT):
+                KeyToBind = self.keymap.get(code, '')
+                if not KeyToBind:
+                    print(f"got unknown key code {code} which is {chr(code)}!!!")
         else:
-            KeyToBind = [
-                '', # 'button zero'
-                'LBUTTON',
-                'MBUTTON',
-                'RBUTTON',
-                'BUTTON4',
-                'BUTTON5',
-            ][evt.GetButton()]
+            evt.Skip()
+            KeyToBind = self.buttons[evt.GetButton()]
 
         # check for each modifier key
-        binding = ''
         if (evt.ControlDown()): binding = binding + 'CTRL-'
         if (evt.AltDown())    : binding = binding + 'ALT-'
         if (evt.ShiftDown())  : binding = binding + 'SHIFT-'
 
         binding = binding + KeyToBind
-        self.kbfeed.SetLabel(binding)
-        self.Layout()
 
-        if (KeyToBind):
-            # self->{'Handling'}++; # Don't take further input kthx
-            # TODO - blink the selection like a menu selection, then return it.
-            self.binding = binding
-            self.EndModal(wx.OK)
-
-        evt.Skip()
+        if binding: self.kbfeed.SetLabel(binding)
 
     # This keymap code was adapted from PADRE < http://padre.perlide.org/ >.
-    def SetKeymap(self):
+    def GetKeymap(self):
         # key choice list
         keymap = {
             wx.WXK_BACK            : 'BACKSPACE',
@@ -138,7 +142,7 @@ class KeyBindDialog(wx.Dialog):
             wx.WXK_F22             : 'F22',
             wx.WXK_F23             : 'F23',
             wx.WXK_F24             : 'F24',
-            ord('~')               : 'TILDE',
+            ord('`')               : 'TILDE',
             ord('-')               : '-',
             ord('=')               : 'EQUALS',
             ord('[')               : '[',
@@ -155,5 +159,5 @@ class KeyBindDialog(wx.Dialog):
         for alphanum in list('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'):
             keymap[ord(alphanum)] = alphanum
 
-        self.keymap = keymap
+        return keymap
 

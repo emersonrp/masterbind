@@ -108,7 +108,10 @@ class SoD(Module):
 
         topSizer = wx.FlexGridSizer(0,2,10,10)
 
-        topSizer.Add( wx.CheckBox( self, -1, "Enable Speed On Demand Binds" ), 0, wx.TOP|wx.LEFT, 10)
+        enablecb = wx.CheckBox( self, -1, "Enable Speed On Demand" )
+        enablecb.SetToolTip('Check this to enable Speed On Demand Binds')
+
+        topSizer.Add( enablecb, 0, wx.ALL, 10)
         topSizer.AddSpacer(1)
 
         leftColumn = wx.BoxSizer(wx.VERTICAL)

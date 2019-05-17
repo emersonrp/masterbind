@@ -1,6 +1,6 @@
 import wx
 from UI.Labels import Label, Labels
-from Window.KeyBindDialog import KeyBindDialog
+from UI.KeyPickerButton import KeyPickerButton
 
 PADDING = 5
 
@@ -29,12 +29,11 @@ class ControlGroup(wx.StaticBoxSizer):
         tooltip  = p.get('tooltip', '')
         callback = p.get('callback', '')
 
-        text = wx.StaticText(parent, -1, Label(value) + ':')
+        text = wx.StaticText(parent, -1, Label(value))
 
         control = None
         if type == 'keybutton':
-            control = wx.Button(parent, label = str(module[value]))
-            control.Bind(wx.EVT_BUTTON, self.KeyPickerDialog, control)
+            control = KeyPickerButton(parent, label = str(module[value]))
         elif type == 'combo':
             control = wx.ComboBox(parent = parent, value = module[value], choices = contents, style = wx.CB_READONLY)
             if callback:
@@ -46,7 +45,7 @@ class ControlGroup(wx.StaticBoxSizer):
             text.SetLabel('')
             control.SetValue(module[value])
         elif type == 'spinbox':
-            control = wx.SpinCtrl(parent)
+            control = wx.SpinCtrl(parent, style = wx.ALIGN_CENTER)
             control.SetValue(module[value])
             minval, maxval = contents
             control.SetRange(minval, maxval)
@@ -72,21 +71,3 @@ class ControlGroup(wx.StaticBoxSizer):
         self.controls[value] = control
 
         return self
-
-    def KeyPickerDialog(self, evt):
-        button = evt.GetEventObject()
-
-        with KeyBindDialog(self, button) as pickerdlg:
-
-            if pickerdlg.ShowModal() == wx.OK:
-                newKey = pickerdlg.kbkeys.GetLabel()
-                value  = button.MasterBindValName
-
-                # TODO -- check for conflicts
-                # my $otherThingWithThatBind = checkConflicts($newKey)
-
-                # update the associated profile var
-                self.parent.Data[value] = newKey
-
-                # re-label the button
-                self.controls[value].SetLabel(newKey)

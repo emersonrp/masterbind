@@ -67,12 +67,12 @@ class KeyBindDialog(wx.Dialog):
     def doCancel(self, evt = None): self.EndModal(wx.CANCEL)
 
     def doClear(self, evt = None):
-        self.kbkeys.Disable()
-        self.kbkeys.SetLabel("DISABLED")
+        self.kbkeys.SetLabel("UNBOUND")
+        self.kbkeys.SetForegroundColour(wx.TheColourDatabase.Find('GREY'))
 
     def handleBind(self, evt):
         KeyToBind = ''
-        binding = ''
+        binding = []
 
         if (isinstance(evt, wx.KeyEvent)):
             code = evt.GetKeyCode()
@@ -95,16 +95,15 @@ class KeyBindDialog(wx.Dialog):
             KeyToBind = self.buttons[evt.GetButton()]
             evt.Skip()
 
-        self.kbkeys.Enable()
+        self.kbkeys.SetForegroundColour(None)
         # check for each modifier key
-        if (evt.ControlDown()): binding = binding + 'CTRL-'
-        if (evt.AltDown())    : binding = binding + 'ALT-'
-        if (evt.ShiftDown())  : binding = binding + 'SHIFT-'
-
-        binding = binding + KeyToBind
+        if (evt.ControlDown()) : binding.append('CTRL')
+        if (evt.AltDown())     : binding.append('ALT')
+        if (evt.ShiftDown())   : binding.append('SHIFT')
+        if KeyToBind           : binding.append(KeyToBind)
 
         if binding:
-            self.kbkeys.SetLabel(binding)
+            self.kbkeys.SetLabel('-'.join(binding))
             self.kbkeys.Enable()
 
     # This keymap code was adapted from PADRE < http://padre.perlide.org/ >.

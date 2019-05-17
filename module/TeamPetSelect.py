@@ -53,7 +53,7 @@ class TeamPetSelect(Module):
         #helpbutton = wx.BitmapButton(self, -1, Utility.Icon('Help'))
         #self.Bind(wx.EVT_BUTTON, self.help, helpbutton)
 
-        headerSizer.Add(enablecb, 0, wx.ALIGN_CENTER_VERTICAL)
+        headerSizer.Add(enablecb, 0, wx.ALL, 10)
         #headerSizer.Add(helpbutton, wx.ALIGN_RIGHT, 0)
 
         topSizer.Add(headerSizer)

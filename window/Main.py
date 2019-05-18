@@ -16,6 +16,8 @@ class Main(wx.Frame):
 
         self.about_info     = None
 
+        self.SetBackgroundColour(wx.WHITE)
+
         h = 600
         w = 800
         #if prefs.get('save_window_size'):
@@ -78,13 +80,17 @@ class Main(wx.Frame):
         # and apply it before .Show()
 
 # TODO TODO TODO -- remove this once we actually start making and saving profiles
-        sizer = wx.BoxSizer(wx.VERTICAL)
         profile = Profile(self)
-        sizer.Add(profile, 1, wx.EXPAND |  wx.ALL, 3)
-        self.SetSizer(sizer)
-        self.Fit()
 # TODO TODO TODO
 
+        writeBindsButton = wx.Button( self, label = 'Write Binds!' )
+        writeBindsButton.Bind(wx.EVT_BUTTON, profile.WriteBindFiles)
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(profile,  1, wx.EXPAND|wx.ALL, 3)
+        sizer.Add(writeBindsButton, 0, wx.ALIGN_RIGHT|wx.ALL, 5)
+
+        self.SetSizerAndFit(sizer)
 
     def newProfileWindow(self, evt):
         pass

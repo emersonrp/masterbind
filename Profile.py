@@ -1,5 +1,5 @@
 import wx
-#from module.BufferBinds import BufferBinds
+from module.BufferBinds import BufferBinds
 #from module.ComplexBinds import ComplexBinds
 #from module.CustomBinds import CustomBinds
 #from module.FPSDisplay import FPSDisplay
@@ -16,7 +16,11 @@ class Profile(wx.Notebook):
         wx.Notebook.__init__(self, parent)
 
         # TODO -- here's where we'd load a profile from a file or something.
-        self.modules = []
+
+
+
+        self.Modules   = []
+        self.BindFiles = []
 
         # Add the individual tabs, in order.
         self.General           = General(self)
@@ -27,7 +31,7 @@ class Profile(wx.Notebook):
         # self.MasterMind        = Mastermind(self)
         self.ChatBinds        = ChatBinds(self)
         # self.SimpleBinds       = SimpleBinds(self)
-        # self.BufferBinds       = BufferBinds(self)
+        self.BufferBinds       = BufferBinds(self)
         # self.ComplexBinds      = ComplexBinds(self)
         # self.CustomBinds       = CustomBinds(self)
 
@@ -37,9 +41,10 @@ class Profile(wx.Notebook):
         #my $filename = File::Spec->catfile(@filename)
         #$self->{'BindFiles'}->{$filename} ||= BindFile(@filename)
 
-    def WriteBindFiles(self):
-        pass
-        #for my $Module ($self->Modules) {print STDERR $Module->Name . "\n"; $Module->PopulateBindFiles; }
+    def WriteBindFiles(self, evt):
+        for module in self.Modules:
+            module.PopulateBindFiles()
 
-        #for my $bindfile (values %{$self->{'BindFiles'}}) { $bindfile->Write($self); }
+        for bindfile in self.Bindfiles:
+            bindfile.Write()
 

@@ -17,6 +17,7 @@ class Module(wx.Panel):
         self.FillTab()
 
         parent.AddPage(self, self.TabTitle)
+        parent.Modules.append(self)
 
     def help(self, evt):
 

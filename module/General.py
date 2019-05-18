@@ -132,10 +132,6 @@ class General(Module):
         })
 
 
-        self.writeBindsButton = wx.Button( self, -1, 'Write Binds!' )
-        powersBox.Add( self.writeBindsButton, 0, wx.ALL )
-        self.Bind(wx.EVT_BUTTON, self.Profile.WriteBindFiles, self.writeBindsButton)
-
         self.powersBox = powersBox
 
         topSizer.Add(powersBox)

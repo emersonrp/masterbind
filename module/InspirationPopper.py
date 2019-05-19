@@ -32,7 +32,7 @@ class InspirationPopper(Module):
             self.Data[f"{Insp}Colors"]    = self.Data.get(f"{Insp}Colors"   , Utility.ColorDefault())
             self.Data[f"Rev{Insp}Colors"] = self.Data.get(f"Rev{Insp}Colors", Utility.ColorDefault())
 
-    def makeTopSizer(self):
+    def MakeTopSizer(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         InspRows =    wx.FlexGridSizer(0,10,2,2)

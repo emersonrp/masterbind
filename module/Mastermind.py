@@ -101,7 +101,7 @@ sub InitKeys {
 	};
 }
 
-sub makeTopSizer {
+sub MakeTopSizer {
 
 	my $self = shift;
 

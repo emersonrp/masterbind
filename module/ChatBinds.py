@@ -29,7 +29,7 @@ class ChatBinds(Module):
             'TypingNotifier'       : '',
         }
 
-    def makeTopSizer(self):
+    def MakeTopSizer(self):
 
         topSizer = wx.BoxSizer(wx.VERTICAL)
 

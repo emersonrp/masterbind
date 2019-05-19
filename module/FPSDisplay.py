@@ -12,7 +12,7 @@ class FPSDisplay(Module):
             'Bindkey': "P",
         }
 
-    def makeTopSizer(self):
+    def MakeTopSizer(self):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 

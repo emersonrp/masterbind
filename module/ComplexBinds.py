@@ -1,8 +1,43 @@
+import wx
+
 from module.Module import Module
+from UI.ControlGroup import ControlGroup
 
 class ComplexBinds(Module):
     def __init__(self, parent):
-        Module.__init__(self, parent, 'ComplexBinds')
+        Module.__init__(self, parent, 'Complex Binds')
+
+
+    def InitKeys(self):
+        self.Data = {
+            'Enabled' : False,
+        }
+
+    def MakeTopSizer(self):
+        self.topSizer = wx.BoxSizer(wx.VERTICAL)
+
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        importbtn = wx.Button(self, label = "Import Bind")
+        importbtn.Bind(wx.EVT_BUTTON, self.ImportBind)
+        importbtn.SetToolTip("Import a Complex Bind from file")
+        importbtn.Disable()
+
+        newbindbtn = wx.Button(self, label = "New Bind")
+        newbindbtn.Bind(wx.EVT_BUTTON, self.AddNewBind)
+        newbindbtn.SetToolTip("Create a new Complex Bind")
+
+        btnSizer.Add( importbtn , 0, wx.ALL, 10 )
+        btnSizer.Add( newbindbtn, 0, wx.ALL, 10 )
+
+        self.topSizer.Add(btnSizer, 1, wx.ALL, 10)
+
+        sizer = ControlGroup(self, 'Complex Binds')
+
+        self.topSizer.Add(sizer, 1, wx.ALL, 10)
+
+    def AddNewBind(self): pass
+    def ImportBind(self): pass
 
     def addCBind(cbinds,n,profile):
         pass

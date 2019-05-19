@@ -39,7 +39,7 @@ class TeamPetSelect(Module):
                 'mode'        : 1,
             }
 
-    def makeTopSizer(self):
+    def MakeTopSizer(self):
         for i in range(1,8):
             self.Data[f"sel{i}"] = self.Data.get(f"sel{i}", "UNBOUND")
 

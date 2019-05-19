@@ -12,18 +12,18 @@ class BufferBinds(Module):
             'Enabled' : False,
         }
 
-    def makeTopSizer(self):
+    def MakeTopSizer(self):
         topSizer = wx.BoxSizer(wx.VERTICAL)
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         importbtn = wx.Button(self, label = "Import Bind")
-        importbtn.Bind(wx.EVT_BUTTON, self.ImportBBind)
+        importbtn.Bind(wx.EVT_BUTTON, self.ImportBind)
         importbtn.SetToolTip("Import a Buffer Bind from file")
         importbtn.Disable()
 
         newbindbtn = wx.Button(self, label = "New Bind")
-        newbindbtn.Bind(wx.EVT_BUTTON, self.AddNewBBind)
+        newbindbtn.Bind(wx.EVT_BUTTON, self.AddNewBind)
         newbindbtn.SetToolTip("Create a new Buffer Bind")
 
         btnSizer.Add( importbtn , 0, wx.ALL, 10 )
@@ -338,7 +338,7 @@ class BufferBinds(Module):
             True if profile.Buffer else False
 
 
-    def AddNewBBind(self):
+    def AddNewBind(self):
         table.insert(bbinds,newBBind())
         bbinds.curbind = table.getn(bbinds)
         module.createDialog(bbinds,profile)
@@ -346,7 +346,7 @@ class BufferBinds(Module):
         profile.modified = true
 
 
-    def ImportBBind(self):
+    def ImportBind(self):
         pass
         # newbbind = newBBind() #  we will be filling this new BBind up.
         # table.insert(bbinds,newbbind)

@@ -14,7 +14,7 @@ class Module(wx.Dialog):
         self.HelpText = '-* PLACEHOLDER HELP TEXT *-'
 
         self.InitKeys()
-        self.makeTopSizer()
+        self.MakeTopSizer()
 
         self.SetSizerAndFit(self.topSizer)
 
@@ -36,12 +36,14 @@ class Module(wx.Dialog):
 
         self.HelpWindow.Toggle()
 
+    def MakeTopSizer(self):
+        raise Exception(f"MakeTopSizer not implemented in {self.Name}")
 
     def InitKeys(self):
-        print("stub InitKeys called in " + self.Name)
+        raise Exception(f"InitKeys not implemented in {self.Name}")
 
     def PopulateBindFiles(self):
-        print("stub PopBindFiles called in " + self.Name)
+        raise Exception(f"PopulateBindFiles not implemented in {self.Name}")
 
     def HelpText(self):
         'Help not currently implemented here'

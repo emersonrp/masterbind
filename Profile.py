@@ -10,8 +10,8 @@ import GameData
 
 
 from module.BufferBinds import BufferBinds
-#from module.ComplexBinds import ComplexBinds
-#from module.CustomBinds import CustomBinds
+from module.ComplexBinds import ComplexBinds
+#from module.CustomBinds import CustomBinds  # no module file for this yet TODO make "importable / new" superclass
 from module.FPSDisplay import FPSDisplay
 from module.InspirationPopper import InspirationPopper
 #from module.Mastermind import Mastermind
@@ -177,7 +177,7 @@ class Profile(wx.Panel):
         self.ChatBinds        = ChatBinds(self)
         # self.SimpleBinds       = SimpleBinds(self)
         self.BufferBinds       = BufferBinds(self)
-        # self.ComplexBinds      = ComplexBinds(self)
+        self.ComplexBinds      = ComplexBinds(self)
         # self.CustomBinds       = CustomBinds(self)
 
         self.SetSizerAndFit(self.topSizer)

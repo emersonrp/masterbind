@@ -115,7 +115,7 @@ class SoD(Module):
         self.Data['HumanNovaPBind']  = self.Data.get('HumanNovaPBind'  , "nop")
         self.Data['HumanDwarfPBind'] = self.Data.get('HumanDwarfPBind' , "nop")
 
-    def makeTopSizer(self):
+    def MakeTopSizer(self):
 
         topSizer = wx.FlexGridSizer(0,2,10,10)
 

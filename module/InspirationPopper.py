@@ -13,6 +13,9 @@ class InspirationPopper(Module):
         self.Data = {
             'Enabled'         : True,
 
+            'InspEnabled'     : True,
+            'RevInspEnabled'  : True,
+
             'AccuracyKey'     : "LSHIFT+A",
             'HealthKey'       : "LSHIFT+S",
             'DamageKey'       : "LSHIFT+D",
@@ -20,6 +23,8 @@ class InspirationPopper(Module):
             'DefenseKey'      : "LSHIFT+W",
             'BreakFreeKey'    : "LSHIFT+E",
             'ResistDamageKey' : "LSHIFT+SPACE",
+
+            'Feedback'        : True,
         }
 
         for Insp in sorted(GameData.Inspirations.keys()):
@@ -64,12 +69,14 @@ class InspirationPopper(Module):
                 RowSet.Add( wx.ColourPickerCtrl( self, -1, wx.Colour(bc['r'], bc['g'], bc['b']),))
 
         useCB = wx.CheckBox( self, -1, 'Enable Inspiration Popper Binds (Largest First)')
+        useCB.SetValue( self.Data['InspEnabled'] )
         useCB.SetToolTip(wx.ToolTip('Check this to enable the Inspiration Popper Binds (largest used first)'))
         sizer.Add(useCB, 0, wx.ALL, 5)
 
         sizer.Add(InspRows, 0, wx.ALL, 10)
 
         useRevCB = wx.CheckBox( self, -1, 'Enable Reverse Inspiration Popper Binds (Smallest First)')
+        useRevCB.SetValue( self.Data['RevInspEnabled'] )
         useRevCB.SetToolTip(wx.ToolTip('Check this to enable the Reverse Inspiration Popper Binds (smallest used first)'))
         sizer.Add(useRevCB, 0, wx.ALL, 5)
 
@@ -80,19 +87,19 @@ class InspirationPopper(Module):
     def PopulateBindFiles(self):
         profile = self.Profile
 
-        ResetFile = profile.General.Data['ResetFile']
+        ResetFile = profile.Data['ResetFile']
 
         for Insp in sorted(GameData.Inspirations.keys()):
 
-            forwardOrder = '$$'.join(map("inspexecname $_", GameData.Inspirations[Insp]))
-            reverseOrder = '$$'.join(map("inspexecname $_", GameData.Inspirations[Insp].reverse()))
+            forwardOrder = '$$'.join(f"inspexecname {i}" for i in GameData.Inspirations[Insp])
+            reverseOrder = '$$'.join(f"inspexecname {i}" for i in reversed(GameData.Inspirations[Insp]))
 
             if self.Data['Feedback']:
-                forwardOrder = cbChatColorOutput(self.Data[f"{Insp}Colors"])    + f"{Insp}$${forwardOrder}"
-                reverseOrder = cbChatColorOutput(self.Data[f"Rev{Insp}Colors"]) + f"{Insp}$${reverseOrder}"
+                forwardOrder = Utility.ChatColorOutput(self.Data[f"{Insp}Colors"])    + f"{Insp}$${forwardOrder}"
+                reverseOrder = Utility.ChatColorOutput(self.Data[f"Rev{Insp}Colors"]) + f"{Insp}$${reverseOrder}"
 
-            if self.Data['Enable']:  cbWriteBind(ResetFile, self.Data[f"{Insp}Key"],    forwardOrder)
-            if self.Data['Reverse']: cbWriteBind(ResetFile, self.Data[f"Rev{Insp}Key"], reverseOrder)
+            if self.Data['InspEnabled']:    self.Profile.Data['ResetFile'].SetBind(self.Data[f"{Insp}Key"],    forwardOrder)
+            if self.Data['RevInspEnabled']: self.Profile.Data['ResetFile'].SetBind(self.Data[f"Rev{Insp}Key"], reverseOrder)
 
     def findconflicts(profile):
 

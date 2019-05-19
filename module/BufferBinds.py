@@ -253,7 +253,7 @@ class BufferBinds(Module):
 
         def PopulateBindFiles(profile):
 
-            ResetFile = profile.General.ResetFile
+            ResetFile = profile.Data['ResetFile']
             Buffer = profile.Buffer or []
             (afile, bfile, cfile, dfile) = ('','','','')
             #  for each bindset, create the binds.
@@ -322,7 +322,7 @@ class BufferBinds(Module):
                             dfile.SetBind(petid,f'-down {chat3}powexecname bbind.power3 bindloadfile           {filebase}a.txt')
 
         def findconflicts(profile):
-            ResetFile = profile.General.ResetFile
+            ResetFile = profile.Data['ResetFile']
             Buffer = profile.Buffer
             for bbind in Buffer:
                 title = bbind.title or 'unknown'

@@ -9,8 +9,7 @@ class BindFile:
 
     def SetBind(self, key, bindtext):
         if not key:
-            print(f"invalid key: { key }, bindtext { bindtext }")
-            raise
+            raise Exception(f"invalid key: { key }, bindtext { bindtext }")
 
         bindtext = bindtext.strip()
 
@@ -55,8 +54,7 @@ class BindFile:
         try:
             filedir.mkdir(parents = True, exist_ok = True)
         except FileExistsError:
-            print(f"{wholedir} already exists but is not a directory, aborting write of {wholepath}")
-            raise Error
+            raise Exception(f"{wholedir} already exists but is not a directory, aborting write of {wholepath}")
 
         contents = ''
         for bind in self.binds:

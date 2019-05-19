@@ -182,14 +182,6 @@ class Profile(wx.Panel):
 
         self.SetSizerAndFit(self.topSizer)
 
-    def AddModuleControls(self, mod_controls):
-        if len(mod_controls) != 2:
-            print("Not enough mod_controls added by a module, here.")
-        for control in mod_controls:
-            self.moduleSizer.Add(control)
-        self.topSizer.Fit()
-
-
     def pickArchetype(self, evt):
         self.Data['Archetype'] = evt.GetEventObject().GetValue()
         self.fillPickers()

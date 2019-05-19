@@ -5,6 +5,14 @@ def ColorDefault():
         'background' : { 'r' : 255, 'g' : 255, 'b' : 255, },
     }
 
+def ChatColorOutput(t):
+    if not isinstance(t, dict):
+        raise Exception(f"Non-dict {dict} passed to ChatColorOutput")
+    border     = "<bordercolor #{:02X}{:02X}{:02X}>".format(t['border'] ['r']    , t['border'] ['g']    , t['border'] ['b'])
+    color      = "<color #{:02X}{:02X}{:02X}>"      .format(t['foreground']['r'] , t['foreground']['g'] , t['foreground']['b'])
+    background = "<background #{:02X}{:02X}{:02X}>" .format(t['background']['r'] , t['background']['g'] , t['background']['b'])
+    return f"{border}{color}{background}"
+
 """
 sub Icon {
     state %Icons;
@@ -614,17 +622,8 @@ function cbTogglePower(label,powerlist,togval,t,v,togcb,profile,w,h,w2,h2)
     return iup.hbox{ttoggle,tlist;alignment="ACENTER"}
 end
 
-function cbChatColorOutput(t)
-    if type(t) ~= "table" then return "" end
-    if not t.enable then return "" end
-    local border = string.format("<bordercolor #%02x%02x%02x>",t.border.r,t.border.g,t.border.b)
-    local color = string.format("<color #%02x%02x%02x>",t.fgcolor.r,t.fgcolor.g,t.fgcolor.b)
-    local bgcolor = string.format("<bgcolor #%02x%02x%02x>",t.bgcolor.r,t.bgcolor.g,t.bgcolor.b)
-    return border..color..bgcolor
-end
-
 function cbChatColors(profile,t)
-    local enable,border,bgcolor,fgcolor = "enable", "border", "bgcolor", "fgcolor"
+    local enable,border,background,foreground = "enable", "border", "background", "foreground"
     local bordercolor = iup.label{title=" ";image = buildColorImage(t[border].r,t[border].g,t[border].b); rastersize="17x17"}
     local borderbtn = iup.button{title="Border";rastersize="40x21"}
     borderbtn.action=function()
@@ -633,19 +632,19 @@ function cbChatColors(profile,t)
         if refreshcb then refreshcb() end
         profile.modified = true
     end
-    local bgc = iup.label{title=" ";image = buildColorImage(t[bgcolor].r,t[bgcolor].g,t[bgcolor].b); rastersize="17x17"}
+    local bgc = iup.label{title=" ";image = buildColorImage(t[background].r,t[background].g,t[background].b); rastersize="17x17"}
     local bgbtn = iup.button{title="BG";rastersize="40x21"}
     bgbtn.action=function()
-        t[bgcolor].r,t[bgcolor].g,t[bgcolor].b = cbGetColor(t[bgcolor].r,t[bgcolor].g,t[bgcolor].b)
-        bgc.image = buildColorImage(t[bgcolor].r,t[bgcolor].g,t[bgcolor].b)
+        t[background].r,t[background].g,t[background].b = cbGetColor(t[background].r,t[background].g,t[background].b)
+        bgc.image = buildColorImage(t[background].r,t[background].g,t[background].b)
         if refreshcb then refreshcb() end
         profile.modified = true
     end
-    local textcolor = iup.label{title=" ";image = buildColorImage(t[fgcolor].r,t[fgcolor].g,t[fgcolor].b); rastersize="17x17"}
+    local textcolor = iup.label{title=" ";image = buildColorImage(t[foreground].r,t[foreground].g,t[foreground].b); rastersize="17x17"}
     local textbtn = iup.button{title="Text";rastersize="40x21"}
     textbtn.action=function()
-        t[fgcolor].r,t[fgcolor].g,t[fgcolor].b = cbGetColor(t[fgcolor].r,t[fgcolor].g,t[fgcolor].b)
-        textcolor.image = buildColorImage(t[fgcolor].r,t[fgcolor].g,t[fgcolor].b)
+        t[foreground].r,t[foreground].g,t[foreground].b = cbGetColor(t[foreground].r,t[foreground].g,t[foreground].b)
+        textcolor.image = buildColorImage(t[foreground].r,t[foreground].g,t[foreground].b)
         if refreshcb then refreshcb() end
         profile.modified = true
     end

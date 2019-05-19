@@ -35,7 +35,7 @@ class TeamPetSelect(Module):
                 'DecTeamSize' : 'H',
                 'IncTeamPos'  : '4',
                 'DecTeamPos'  : '8',
-                'Reset'       : '',
+                'Reset'       : 'UNBOUND',
                 'mode'        : 1,
             }
 
@@ -145,13 +145,16 @@ class TeamPetSelect(Module):
 
     def PopulateBindFiles(self):
         profile    = self.Profile
-        ResetFile  = profile.General['ResetFile']
-        if self.Data['TPSSelMode'] < 3:
+        ResetFile  = profile.Data['ResetFile']
+        ## TODO XXX TODO - TPSSelMode is a string now.
+        #if self.Data['TPSSelMode'] < 3:
+        if self.Data['TPSSelMode'] != '':  # TODO fix to match above line
             selmethod = "teamselect"
             selnummod = 0
             selmethod1 = "petselect"
             selnummod1 = 1
-            if self.Data['TPSSelMode'] == 2:
+            #if self.Data['TPSSelMode'] == 2:
+            if self.Data['TPSSelMode'] == "Mode Two": # TODO fix to match above line
                 selmethod = "petselect"
                 selnummod = 1
                 selmethod1 = "teamselect"
@@ -159,54 +162,56 @@ class TeamPetSelect(Module):
             selresetfile = profile.GetBindFile("tps","reset.txt")
             for i in range(1, 8):
                 selfile = profile.GetBindFile("tps",f"sel{i}.txt")
-                ResetFile.   SetBind(self.Data[f"TeamSelect{i}"],f"{selmethod} {i - selnummod}" + BindFile.BLF(profile,'tps',f"sel{i}.txt"))
-                selresetfile.SetBind(self.Data[f"TeamSelect{i}"],f"{selmethod} {i - selnummod}" + BindFile.BLF(profile,'tps',f"sel{i}.txt"))
+                ResetFile.   SetBind(self.Data[f"TeamSelect{i}"],f"{selmethod} {i - selnummod}" + selfile.BLF())
+                selresetfile.SetBind(self.Data[f"TeamSelect{i}"],f"{selmethod} {i - selnummod}" + selfile.BLF())
                 for j in range(1, 8):
                     if (i == j):
-                        selfile.SetBind(self.Data[f"TeamSelect{j}"], f"{selmethod1} {j - selnummod1}" + BindFile.BLF(profile,'tps',"reset.txt"))
+                        selfile.SetBind(self.Data[f"TeamSelect{j}"], f"{selmethod1} {j - selnummod1}" + selresetfile.BLF())
                     else:
-                        selfile.SetBind(self.Data[f"TeamSelect{j}"], f"{selmethod} {j - selnummod}"  + BindFile.BLF(profile,'tps',f"sel{j}.txt"))
+                        selfile.SetBind(self.Data[f"TeamSelect{j}"], f"{selmethod} {j - selnummod}"  + profile.GetBindFile("tps", f"sel{j}.txt").BLF())
         else:
             selmethod = "teamselect"
             selnummod = 0
-            if self.Data['TPSSelMode'] == 4:
+            #if self.Data['TPSSelMode'] == 4:
+            if self.Data['TPSSelMode'] == "Mode Four": # TODO fix to match above line
                 selmethod = "petselect"
                 selnummod = 1
             for i in range(1, 8):
                 ResetFile.SetBind(self.Data['sel1'],f"{selmethod} {i - selnummod}")
 
-        if self.Data['PetSelEnable']:
-            tpsCreatePetSet(profile,1,0,profile.General['ResetFile'])
+        if self.Data['EnablePet']:
+            self.tpsCreatePetSet(1,0,profile.Data['ResetFile'])
             for size in range(1, 8):
                 for sel in range(0, size):
                     outfile = profile.GetBindFile("tps",f"pet{size}{sel}.txt")
-                    tpsCreatePetSet(profile, size, sel, outfile)
+                    self.tpsCreatePetSet(size, sel, outfile)
 
 
-        if self.Data['TeamSelEnable']:
-            tpsCreateTeamSet(profile,1,0,0,profile.General['ResetFile'])
+        if self.Data['EnableTeam']:
+            self.tpsCreateTeamSet(1,0,0,profile.Data['ResetFile'])
             for size in range(1, 8):
                 for pos in range(0, size):
                     for sel in range(0, size):
                         if (sel != pos or sel == 0):
                             outfile = profile.GetBindFile("tps", f"team{size}{pos}{sel}.txt")
-                            tpsCreateTeamSet(profile, size, pos, sel, outfile)
+                            self.tpsCreateTeamSet(size, pos, sel, outfile)
 
 
-    def tpsCreatePetSet(self, profile, tsize, tset, outfile):
+    def tpsCreatePetSet(self, tsize, tsel, outfile):
+        profile = self.Profile
         # tsize is the size of the team at the moment
         # tpos is the position of the player at the moment, or 0 if unknown
         # tsel is the currently selected team member as far as the bind knows, or 0 if unknown
-        #file.SetBind(TPS.reset,'tell $name, Re-Loaded Single Key Team Select Bind.' . BindFile::BLF($profile, 'petsel', '10.txt')
+        #file.SetBind(TPS.reset,'tell $name, Re-Loaded Single Key Team Select Bind.' + BindFile::BLF($profile, 'petsel', '10.txt')
         if (tsize < 8):
-            outfile.SetBind(self.Data['IncPetSize'],'tell $name, ' + formatPetConfig(tsize+1) + BindFile.BLF(profile, 'tps', (tsize+1) + f"{tsel}.txt"))
+            outfile.SetBind(self.Data['IncPetSize'],'tell $name, ' + self.formatPetConfig(tsize+1) + profile.GetBindFile("tps",  f"{tsize+1}{tsel}.txt").BLF())
         else:
             outfile.SetBind(self.Data['DecPetSize'],'nop')
 
         if tsize == 1:
             outfile.SetBind(self.Data['DecPetSize'],'nop')
-            outfile.SetBind(self.Data['SelNextPet'],'petselect 0' . BindFile.BLF(profile, 'tps', f'{tsize}1.txt'))
-            outfile.SetBind(self.Data['SelPrevPet'],'petselect 0' . BindFile.BLF(profile, 'tps', f'{tsize}1.txt'))
+            outfile.SetBind(self.Data['SelNextPet'],'petselect 0' + profile.GetBindFile("tps",  f'{tsize}1.txt').BLF())
+            outfile.SetBind(self.Data['SelPrevPet'],'petselect 0' + profile.GetBindFile("tps",  f'{tsize}1.txt').BLF())
         else:
             (selnext, selprev) = (tsel+1, tsel-1)
             if selnext > tsize: selnext = 1
@@ -215,20 +220,21 @@ class TeamPetSelect(Module):
             newsel = tsel
             if tsize-1 < tsel: newsel = tsize-1
             if tsize == 2:     newsel = 0
-            outfile.SetBind(self.Data['DecPetSize'],'tell $name, ' + formatPetConfig(tsize-1) + BindFile.BLF(profile, 'tps', f'{tsize-1}{newsel}.txt'))
-            outfile.SetBind(self.Data['SelNextPet'],'petselect ' + (selnext-1) + BindFile.BLF(profile, 'tps', f'{tsize}{selnext}.txt'))
-            outfile.SetBind(self.Data['SelPrevPet'],'petselect ' + (selprev-1) + BindFile.BLF(profile, 'tps', f'{tsize}{selprev}.txt'))
+            outfile.SetBind(self.Data['DecPetSize'],'tell $name, ' + self.formatPetConfig(tsize-1) + profile.GetBindFile("tps",  f'{tsize-1}{newsel}.txt').BLF())
+            outfile.SetBind(self.Data['SelNextPet'],f'petselect {selnext-1}' + profile.GetBindFile("tps",  f'{tsize}{selnext}.txt').BLF())
+            outfile.SetBind(self.Data['SelPrevPet'],f'petselect {selprev-1}' + profile.GetBindFile("tps",  f'{tsize}{selprev}.txt').BLF())
 
     def formatPetConfig(self, num):
         return "[" + ('First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth')[num - 1] + " Pet ]"
 
-    def tpsCreateTeamSet(self, profile, tsize, tpos, tset, outfile):
+    def tpsCreateTeamSet(self, tsize, tpos, tsel, outfile):
+        profile = self.Profile
         #  tsize is the size of the team at the moment
         #  tpos is the position of the player at the moment, or 0 if unknown
         #  tsel is the currently selected team member as far as the bind knows, or 0 if unknown
-        outfile.SetBind(self.Data['Reset'],'tell $name, Re-Loaded Single Key Team Select Bind' . BindFile.BLF(profile, 'teamsel2', '100.txt'))
+        outfile.SetBind(self.Data['Reset'],'tell $name, Re-Loaded Single Key Team Select Bind' + profile.GetBindFile("tps", '100.txt').BLF())
         if tsize < 8:
-            outfile.SetBind(self.Data['IncTeamSize'],'tell $name, ' . formatTeamConfig(tsize+1, tpos) . BindFile.BLF(profile, 'teamsel2',f'{tsize+1}{tpos}{tsel}.txt'))
+            outfile.SetBind(self.Data['IncTeamSize'],'tell $name, ' + self.formatTeamConfig(tsize+1, tpos) + profile.GetBindFile("tps", f'{tsize+1}{tpos}{tsel}.txt').BLF())
         else:
             outfile.SetBind(self.Data['IncTeamSize'],'nop')
 
@@ -256,15 +262,15 @@ class TeamPetSelect(Module):
             if tsize-1 < tsel: newsel = tsize-1
             if tsize == 2:      newpos = newsel = 0
 
-            outfile.SetBind(self.Data['DecTeamSize'],'tell $name, ' + formatTeamConfig(tsize-1,newpos) . BindFile.BLF(profile, 'teamsel2', f'{tsize-1}{newpos}{newsel}.txt'))
-            outfile.SetBind(self.Data['IncTeamPos'], 'tell $name, ' + formatTeamConfig(tsize,  tposup) . BindFile.BLF(profile, 'teamsel2', f'{tsize}{tposup}{tsel}.txt'))
-            outfile.SetBind(self.Data['DecTeamPos'], 'tell $name, ' + formatTeamConfig(tsize,  tposdn) . BindFile.BLF(profile, 'teamsel2', f'{tsize}{tposdn}{tsel}.txt'))
+            outfile.SetBind(self.Data['DecTeamSize'],'tell $name, ' + self.formatTeamConfig(tsize-1,newpos) + profile.GetBindFile("tps",  f'{tsize-1}{newpos}{newsel}.txt').BLF())
+            outfile.SetBind(self.Data['IncTeamPos'], 'tell $name, ' + self.formatTeamConfig(tsize,  tposup) + profile.GetBindFile("tps",  f'{tsize}{tposup}{tsel}.txt').BLF())
+            outfile.SetBind(self.Data['DecTeamPos'], 'tell $name, ' + self.formatTeamConfig(tsize,  tposdn) + profile.GetBindFile("tps",  f'{tsize}{tposdn}{tsel}.txt').BLF())
 
-            outfile.SetBind(self.Data['SelNextTeam'],f'teamselect {selnext}' + BindFile.BLF(profile, 'teamsel2', f'{tsize}{tpos}{selnext}.txt'))
-            outfile.SetBind(self.Data['SelPrevTeam'],f'teamselect {selprev}' + BindFile.BLF(profile, 'teamsel2', f'{tsize}{tpos}{selprev}.txt'))
+            outfile.SetBind(self.Data['SelNextTeam'],f'teamselect {selnext}' + profile.GetBindFile("tps",  f'{tsize}{tpos}{selnext}.txt').BLF())
+            outfile.SetBind(self.Data['SelPrevTeam'],f'teamselect {selprev}' + profile.GetBindFile("tps",  f'{tsize}{tpos}{selprev}.txt').BLF())
 
-    post = ('Zeroth','First','Second','Third','Fourth','Fifth','Sixth','Seventh','Eighth'); # damn zero-based arrays
     def formatTeamConfig(self, size, pos):
+        post = ('Zeroth','First','Second','Third','Fourth','Fifth','Sixth','Seventh','Eighth'); # damn zero-based arrays
         sizetext = f"{size}-Man"
         postext = ", No Spot"
         if pos > 0:     postext  = f", {post[pos]} Spot"

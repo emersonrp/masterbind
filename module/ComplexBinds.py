@@ -168,7 +168,7 @@ class ComplexBinds(Module):
 
     def PopulateBindFiles(thing):
         profile = thing.Profile
-        ResetFile = profile.General['ResetFile']
+        ResetFile = profile.Data['ResetFile']
         cbinds = profile['cbinds'] or []
 
         (cbindfile, maxK, maxC) = ('', 0, 0)

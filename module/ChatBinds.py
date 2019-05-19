@@ -7,7 +7,7 @@ import UI.Labels
 
 class ChatBinds(Module):
     def __init__(self, parent):
-        Module.__init__(self, parent, 'ChatBinds')
+        Module.__init__(self, parent, 'Chat Binds')
 
 
     def InitKeys(self):
@@ -16,7 +16,8 @@ class ChatBinds(Module):
         self.TabTitle = 'Chat Binds'
 
         self.Data = {
-            'Enable'               : 1,
+            'Enabled'              : True,
+
             'Message'              : "afk Typing Message",
             'StartChat'            : 'ENTER',
             'SlashChat'            : '/',
@@ -28,14 +29,9 @@ class ChatBinds(Module):
             'TypingNotifier'       : '',
         }
 
-    def FillTab(self):
+    def makeTopSizer(self):
 
         topSizer = wx.BoxSizer(wx.VERTICAL)
-
-        enablecb = wx.CheckBox( self, -1, "Enable Chat Binds" )
-        enablecb.SetToolTip('Check this to enable Custom Chat Binds')
-
-        topSizer.Add( enablecb, 0, wx.ALL, 10 )
 
         sizer = ControlGroup(self, 'Chat Binds')
 
@@ -67,7 +63,8 @@ class ChatBinds(Module):
         })
 
         topSizer.Add(sizer)
-        self.SetSizer(topSizer)
+
+        self.topSizer = topSizer
 
     def PopulateBindfiles(self):
         ResetFile = self.Profile.General['ResetFile']
@@ -94,7 +91,6 @@ class ChatBinds(Module):
         return True if self.Data['enable'] else False
 
     UI.Labels.Add({
-        'Enable'               : 'Enable Chat Binds',
         'Message'              : '"afk typing" message',
         'StartChat'            : 'Start Chat (no "/")',
         'SlashChat'            : 'Start Chat (with "/")',

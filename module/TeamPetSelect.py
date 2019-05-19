@@ -6,12 +6,13 @@ import UI.Labels
 
 class TeamPetSelect(Module):
     def __init__(self, parent):
-        Module.__init__(self, parent, 'TeamPetSelect')
+        Module.__init__(self, parent, 'Team / Pet Select Binds')
 
     def InitKeys(self):
-
         if not self.Data:
             self.Data = {
+                'Enabled'     : True,
+
                 'TPSEnable'   : 1,
                 'TPSSelMode'  : '',
                 'TeamSelect1' : 'UNBOUND',
@@ -38,25 +39,11 @@ class TeamPetSelect(Module):
                 'mode'        : 1,
             }
 
-    def FillTab(self):
+    def makeTopSizer(self):
         for i in range(1,8):
             self.Data[f"sel{i}"] = self.Data.get(f"sel{i}", "UNBOUND")
 
         topSizer = wx.BoxSizer(wx.VERTICAL)
-
-        ##### header
-        headerSizer = wx.FlexGridSizer(0,2,10,10)
-
-        enablecb = wx.CheckBox( self, -1, 'Enable Team/Pet Select')
-        enablecb.SetToolTip( wx.ToolTip('Check this to enable the Team/Pet Select Binds') )
-
-        #helpbutton = wx.BitmapButton(self, -1, Utility.Icon('Help'))
-        #self.Bind(wx.EVT_BUTTON, self.help, helpbutton)
-
-        headerSizer.Add(enablecb, 0, wx.ALL, 10)
-        #headerSizer.Add(helpbutton, wx.ALIGN_RIGHT, 0)
-
-        topSizer.Add(headerSizer)
 
         ##### direct-select keys
         TPSDirectBox = ControlGroup(self, 'Direct Team/Pet Select')
@@ -76,7 +63,7 @@ class TeamPetSelect(Module):
                 'tooltip' : f"Choose the key that will select team member / pet {selectid}",
             })
 
-        topSizer.Add(TPSDirectBox)
+        topSizer.Add(TPSDirectBox, 0, wx.EXPAND)
 
 
         ##### Pet Select Binds
@@ -106,7 +93,7 @@ class TeamPetSelect(Module):
             'parent' : self,
             'tooltip' : 'Choose the key that will decrease the size of your pet/henchman group rotation',
         })
-        topSizer.Add(PetSelBox)
+        topSizer.Add(PetSelBox, 0, wx.EXPAND)
 
         ##### Team Select Binds
         TeamSelBox = ControlGroup(self, 'Team Select')
@@ -152,11 +139,9 @@ class TeamPetSelect(Module):
             'parent' : self,
             'tooltip' : 'Choose the key that will reset your team rotation to solo',
         })
-        topSizer.Add(TeamSelBox)
+        topSizer.Add(TeamSelBox, 0, wx.EXPAND)
 
-        self.TabTitle = 'Team / Pet Selection'
-
-        self.SetSizer(topSizer)
+        self.topSizer = topSizer
 
     def PopulateBindFiles(self):
         profile    = self.Profile

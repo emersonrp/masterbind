@@ -1,19 +1,16 @@
+from pathlib import Path
+
 class BindFile:
 
-    BindFiles = {}
-
-    def __init__(self, filename):
-
-        if BindFiles[filename]:
-            self = BindFiles[filename]
-            return
-
-        self.binds = {}
+    def __init__(self, profile, filename):
+        self.binds    = {}
+        self.filename = Path(filename)
+        self.Profile  = profile
 
     def SetBind(self, key, bindtext):
         if not key:
             print(f"invalid key: { key }, bindtext { bindtext }")
-            return
+            raise
 
         bindtext = bindtext.strip()
 
@@ -24,48 +21,50 @@ class BindFile:
 
         self.binds[key] = bindtext
 
-    def BaseReset(self, profile):
-        return '$$bindloadfilesilent ' + profile.General['BindsDir'] + "\\subreset.txt"
+    def BaseReset(self):
+        return '$$bindloadfilesilent ' + self.Profile.Data['BindsDir'] + "\\subreset.txt"
 
     # BLF == full "$$bindloadfilesilent path/to/file/kthx"
-    def BLF(self, *args):
-        return '$$' + self.BLFs(args)
+    def BLF(self):
+        return '$$' + self.BLFs()
 
     # BLFs == same as above but no '$$' for use at start of binds.  Unnecessary?
-    def BLFs(self, *args):
-        return 'bindloadfilesilent ' + self.BLFPath(args)
+    def BLFs(self):
+        return 'bindloadfilesilent ' + str(self.BLFPath())
 
     # BLFPath == just the path to the file
-    def BLFPath(self, profile, *args):
-        pass
-        #my $file = pop @bits
-        #my ($vol, $bdir, undef) = File::Spec->splitpath( $profile->General->{'BindsDir'}, 1 )
-        #my $dirpath = File::Spec->catdir($bdir, @bits)
-        #return File::Spec->catpath($vol, $dirpath, $file)
+    def BLFPath(self):
+        # We re-calculate all this actual paths stuff each time
+        # in case the user has changed the bindsdir in the meantime
+        if self.Profile.Data.get('BindsDir', ''):
+            bindsdir = Path(self.Profile.Data['BindsDir'])
+        else:
+            # TODO - do something more error-y
+            print("ERROR!  BindsDir unset in General prefs!!!")
+            return
 
-    def Write(self, profile):
-        # Pick apart the binds directory
-        # TODO XXX all this File::Spec stuff
-        (vol, bdir, _) = File.Spec.splitpath( profile.General['BindsDir'], 1 )
+        wholepath = bindsdir / self.filename
+        return wholepath
 
-        # Pick apart the filename into component bits.
-        (_, dir, file) = File.Spec.splitpath( self['filename'] )
+    def Write(self):
+        wholepath = self.BLFPath()
+        # Get the full parent dir of the file
+        filedir   = wholepath.parent
 
-        # mash together the two 'directory' parts:
-        dir = File.Spec.catdir(bdir, dir)
-
-        # now we want the fully-qualified dir name so we can make sure it exists...
-        newpath = File.Spec.catpath( vol, dir, '' )
-        # and the fully-qualified filename so we can write to it.
-        fullname = File.Spec.catpath( vol, dir, file )
         # Make the dir if it doesn't exist already.
-        # if ( ! -d $newpath ) {
-        #     File::Path::make_path( $newpath, {verbose=>1} ) or warn "can't make dir $newpath: $!"
-        # }
+        try:
+            filedir.mkdir(parents = True, exist_ok = True)
+        except FileExistsError:
+            print(f"{wholedir} already exists but is not a directory, aborting write of {wholepath}")
+            raise Error
 
-        # open the file and blast the poop into it.  whee!
-        # open (my $fh, '>', $fullname ) or warn "can't write to $fullname: $!"
-        # for my $k (sort keys %{ $self->{'binds'} }) {
-        #     print $fh qq|$k "$self->{'binds'}->{$k}"\n|
-        # }
-        # print STDERR "Done $fullname!\n"
+        contents = ''
+        for bind in self.binds:
+            contents = contents + f"{bind} {self.binds[bind]}\n"
+
+        # TODO -- need to wholepath.unlink first?
+
+        # TODO this is just debug
+        #print(f"about to write to {wholepath}:\n{contents}")
+
+        wholepath.write_text(contents)

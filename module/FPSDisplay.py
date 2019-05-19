@@ -3,38 +3,30 @@ from module.Module import Module
 
 class FPSDisplay(Module):
     def __init__(self, parent):
-        Module.__init__(self, parent, 'FPSDisplay')
+        Module.__init__(self, parent, 'FPS Display Binds')
 
     def InitKeys(self):
-        if self.Data == None:
-            self.Data = {
-                Enable : 1,
-                Bindkey: "P",
-            }
+        self.Data = {
+            'Enabled' : True,
 
-    def FillTab(self):
+            'Bindkey': "P",
+        }
 
-        self.TabTitle = "FPS / Netgraph"
+    def makeTopSizer(self):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-
-        useCB = wx.CheckBox( self, -1, 'Enable FPS Binds')
-
-        useCB.SetToolTip(wx.ToolTip('Check this to enable the FPS and Netgraph Toggle Binds'))
-
-        sizer.Add(useCB, 0, wx.ALL, 10)
 
         minisizer = wx.FlexGridSizer(0,2,5,5)
         minisizer.Add( wx.StaticText(self, -1, 'Toggle FPS/Netgraph'), 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
         minisizer.Add( wx.Button    (self, -1, self.Data['Bindkey']))
 
-        sizer.Add(minisizer)
+        sizer.Add(minisizer, 1, wx.ALL, 10)
 
-        self.SetSizerAndFit(sizer)
+        self.topSizer = sizer
 
 
     def PopulateBindFiles(self):
-        ResetFile = self.Profile.General.Data['ResetFile']
+        ResetFile = self.Profile.Data['ResetFile']
         ResetFile.SetBind(self.Data['Bindkey'],'++showfps$$++netgraph')
 
     def findconflicts(self):

@@ -6,13 +6,14 @@ import Utility
 
 class InspPop(Module):
     def __init__(self, parent):
-        Module.__init__(self, parent, 'InspPop')
+        Module.__init__(self, parent, 'Inspiration Popper Binds')
 
     def InitKeys(self):
 
         if self.Data == None:
             self.Data = {
-                Enable : undef,
+                Enabled         : False,
+
                 AccuracyKey     : "LSHIFT+A",
                 HealthKey       : "LSHIFT+S",
                 DamageKey       : "LSHIFT+D",
@@ -22,9 +23,7 @@ class InspPop(Module):
                 ResistDamageKey : "LSHIFT+SPACE",
             }
 
-    def FillTab(self):
-
-        self.TabTitle = 'Inspiration Popper'
+    def makeTopSizer(self):
 
         sizer = wx.BoxSizer.new(wx.wxVERTICAL)
 
@@ -77,7 +76,7 @@ class InspPop(Module):
 
         sizer.Add(RevInspRows)
 
-        self.SetSizerAndFit(sizer)
+        self.topSizer = sizer
 
     def PopulateBindFiles(self):
         profile = self.Profile

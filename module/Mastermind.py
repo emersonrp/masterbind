@@ -101,7 +101,7 @@ sub InitKeys {
 	};
 }
 
-sub FillTab {
+sub makeTopSizer {
 
 	my $self = shift;
 

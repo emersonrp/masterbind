@@ -2,7 +2,6 @@ Origins = ['Magic','Mutation','Natural','Science','Technology']
 
 Archetypes = {
     "Arachnos Soldier" : {
-        'Faction' : 'V',
         "Epic" : {
             "Mace Mastery" : [
                 "Mace Blast",
@@ -84,7 +83,6 @@ Archetypes = {
         },
     },
     "Arachnos Widow" : {
-        'Faction' : 'V',
         "Epic" : {
             "Mace Mastery" : [
                 "Mace Blast",
@@ -167,7 +165,6 @@ Archetypes = {
         },
     },
     'Blaster' : {
-        'Faction' : 'H',
         "Epic" : {
             "Cold Mastery" : [
                 "Snow Storm",
@@ -381,7 +378,6 @@ Archetypes = {
         },
     },
     'Brute' : {
-        'Faction' : 'V',
         "Epic" : {
             "Mace Mastery" : [
                 "Mace Blast",
@@ -595,7 +591,6 @@ Archetypes = {
         },
     },
     'Controller' : {
-        'Faction' : 'H',
         "Epic" : {
             "Fire Mastery" : [
                 "Fire Blast",
@@ -810,7 +805,6 @@ Archetypes = {
         },
     },
     'Corruptor' : {
-        'Faction' : 'V',
         "Epic" : {
             "Mace Mastery" : [
                 "Web Envelope",
@@ -1062,7 +1056,6 @@ Archetypes = {
         },
     },
     'Defender' : {
-        'Faction' : 'H',
         "Epic" : {
             "Dark Mastery" : [
                 "Oppressive Gloom",
@@ -1315,7 +1308,6 @@ Archetypes = {
         },
     },
     'Dominator' : {
-        'Faction' : 'V',
         "Epic" : {
             "Mace Mastery" : [
                 "Poisonous Ray",
@@ -1490,7 +1482,6 @@ Archetypes = {
         },
     },
     'Mastermind' : {
-        'Faction' : 'V',
         "Epic" : {
             "Mace Mastery" : [
                 "Web Envelope",
@@ -1676,7 +1667,6 @@ Archetypes = {
         },
     },
     'Peacebringer' : {
-        'Faction' : 'H',
         "Dependent" : {
             "Bright Nova" : [
                 "Bright Nova Bolt",
@@ -1734,7 +1724,6 @@ Archetypes = {
         },
     },
     'Scrapper' : {
-        'Faction' : 'H',
         "Epic" : {
             "Body Mastery" : [
                 "Conserve Power",
@@ -1932,7 +1921,6 @@ Archetypes = {
         },
     },
     'Stalker' : {
-        'Faction' : 'V',
         "Epic" : {
             "Mace Mastery" : [
                 "Summon Blaster",
@@ -2130,7 +2118,6 @@ Archetypes = {
         },
     },
     'Tanker' : {
-        'Faction' : 'H',
         "Epic" : {
             "Arctic Mastery" : [
                 "Chilblain",
@@ -2349,7 +2336,6 @@ Archetypes = {
         },
     },
     'Warshade' : {
-        'Faction' : 'H',
         "Dependent" : {
             "Black Dwarf" : [
                 "Black Dwarf Strike",

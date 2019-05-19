@@ -5,18 +5,15 @@ from UI.ControlGroup import ControlGroup
 
 class BufferBinds(Module):
     def __init__(self, parent):
-        Module.__init__(self, parent, 'BufferBinds')
+        Module.__init__(self, parent, 'Buffer Binds')
 
     def InitKeys(self):
-        self.Data = { }
-        self.TabTitle = "Buffer Binds"
+        self.Data = {
+            'Enabled' : False,
+        }
 
-    def FillTab(self):
+    def makeTopSizer(self):
         topSizer = wx.BoxSizer(wx.VERTICAL)
-
-        enablecb = wx.CheckBox( self, -1, "Enable Buffer Binds" )
-        enablecb.SetToolTip('Check this to enable Custom Chat Binds')
-        topSizer.Add( enablecb, 0, wx.ALL, 10 )
 
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -32,7 +29,7 @@ class BufferBinds(Module):
         btnSizer.Add( importbtn , 0, wx.ALL, 10 )
         btnSizer.Add( newbindbtn, 0, wx.ALL, 10 )
 
-        topSizer.Add(btnSizer)
+        topSizer.Add(btnSizer, 1, wx.ALL, 10)
 
         sizer = ControlGroup(self, 'Buffer Binds')
 
@@ -88,7 +85,7 @@ class BufferBinds(Module):
 
         topSizer.Add(sizer, 1, wx.ALL, 10)
 
-        self.SetSizerAndFit(topSizer)
+        self.topSizer = topSizer
 
 
     def addBBind(binds, n, profile):

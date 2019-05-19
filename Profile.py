@@ -13,7 +13,7 @@ from module.BufferBinds import BufferBinds
 #from module.ComplexBinds import ComplexBinds
 #from module.CustomBinds import CustomBinds
 from module.FPSDisplay import FPSDisplay
-#from module.InspirationPopper import InspirationPopper
+from module.InspirationPopper import InspirationPopper
 #from module.Mastermind import Mastermind
 #from module.SimpleBinds import SimpleBinds
 from module.SoD import SoD
@@ -28,6 +28,7 @@ class Profile(wx.Panel):
 
         self.Modules   = []
         self.BindFiles = {}
+        self.BindKeys  = {}
 
         self.Data = {
             'Name'          : '',
@@ -171,7 +172,7 @@ class Profile(wx.Panel):
         self.SoD               = SoD(self)
         self.FPSDisplay        = FPSDisplay(self)
         self.TeamPetSelect     = TeamPetSelect(self)
-        # self.InspirationPopper = InspirationPopper(self)
+        self.InspirationPopper = InspirationPopper(self)
         # self.MasterMind        = Mastermind(self)
         self.ChatBinds        = ChatBinds(self)
         # self.SimpleBinds       = SimpleBinds(self)
@@ -263,8 +264,6 @@ class Profile(wx.Panel):
         'ResetKey' : 'Reset Key',
         'ResetFeedback' : 'Give Feedback on Reset',
     })
-
-
 
     # TODO - hacking together the catfile() by hand here seems ugly.
     def GetBindFile(self, *args):

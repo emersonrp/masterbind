@@ -28,29 +28,27 @@ class Main(wx.Frame):
         # "Profile" (File) menu
         ProfMenu = wx.Menu()
 
-        Prof_new  = ProfMenu.Append(-1, "New Profile...", "Create a new profile")
-        Prof_load = ProfMenu.Append(-1, "Load Profile...", "Load an existing profile")
-        Prof_save = ProfMenu.Append(-1, "Save Profile", "Save the current profile")
+        self.Prof_new  = ProfMenu.Append(-1, "New Profile...", "Create a new profile")
+        self.Prof_load = ProfMenu.Append(-1, "Load Profile...", "Load an existing profile")
+        self.Prof_save = ProfMenu.Append(-1, "Save Profile", "Save the current profile")
         ProfMenu.AppendSeparator()
-        Prof_prefs = ProfMenu.Append(-1, "Preferences...", "Edit Preferences")
-        Prof_exit  = ProfMenu.Append(wx.ID_EXIT)
+        self.Prof_prefs = ProfMenu.Append(-1, "Preferences...", "Edit Preferences")
+        self.Prof_exit  = ProfMenu.Append(wx.ID_EXIT)
 
-        Prof_new.Enable(0)
-        Prof_load.Enable(0)
-        Prof_save.Enable(0)
-        Prof_prefs.Enable(0)
+        self.Prof_new.Enable(0)
+        self.Prof_load.Enable(0)
+        self.Prof_save.Enable(0)
+        self.Prof_prefs.Enable(0)
 
         # "Help" Menu
         HelpMenu = wx.Menu()
 
-        Help_manual  = HelpMenu.Append(-1, "Manual","User's Manual")
-        Help_faq     = HelpMenu.Append(-1, "FAQ","Frequently Asked Questions")
-        Help_license = HelpMenu.Append(-1, "License Info","")
-        Help_about   = HelpMenu.Append(wx.ID_ABOUT)
+        self.Help_manual  = HelpMenu.Append(-1, "Manual","User's Manual")
+        self.Help_faq     = HelpMenu.Append(-1, "FAQ","Frequently Asked Questions")
+        self.Help_about   = HelpMenu.Append(wx.ID_ABOUT)
 
-        Help_manual.Enable(0)
-        Help_faq.Enable(0)
-        Help_license.Enable(0)
+        self.Help_manual.Enable(0)
+        self.Help_faq.Enable(0)
 
         # cram the separate menus into a menubar
         MenuBar = wx.MenuBar()
@@ -61,16 +59,15 @@ class Main(wx.Frame):
         self.SetMenuBar(MenuBar)
 
         # MENUBAR EVENTS
-        self.Bind(wx.EVT_MENU, self.newProfileWindow, Prof_new)
-        self.Bind(wx.EVT_MENU, no_op, Prof_load)
-        self.Bind(wx.EVT_MENU, no_op, Prof_save)
-        self.Bind(wx.EVT_MENU, no_op, Prof_prefs)
-        self.Bind(wx.EVT_MENU, self.exitApplication, Prof_exit)
+        self.Bind(wx.EVT_MENU, self.newProfile, self.Prof_new)
+        self.Bind(wx.EVT_MENU, self.loadProfile, self.Prof_load)
+        self.Bind(wx.EVT_MENU, self.saveProfile, self.Prof_save)
+        self.Bind(wx.EVT_MENU, self.prefsWindow, self.Prof_prefs)
+        self.Bind(wx.EVT_MENU, self.exitApplication, self.Prof_exit)
 
-        self.Bind(wx.EVT_MENU, no_op, Help_manual)
-        self.Bind(wx.EVT_MENU, no_op, Help_faq)
-        self.Bind(wx.EVT_MENU, no_op, Help_license)
-        self.Bind(wx.EVT_MENU, self.showAboutBox, Help_about)
+        self.Bind(wx.EVT_MENU, no_op, self.Help_manual)
+        self.Bind(wx.EVT_MENU, no_op, self.Help_faq)
+        self.Bind(wx.EVT_MENU, self.showAboutBox, self.Help_about)
 
         AppIcon = wx.Icon()
         AppIcon.LoadFile('MasterBind.ico', wx.BITMAP_TYPE_ICO)
@@ -92,10 +89,20 @@ class Main(wx.Frame):
 
         self.SetSizerAndFit(sizer)
 
-    def newProfileWindow(self, evt):
+    def newProfile(self, evt):
+        pass
+
+    def loadProfile(self, evt):
+        pass
+
+    def saveProfile(self, evt):
+        pass
+
+    def prefsWindow(self, evt):
         pass
 
     def exitApplication(self, evt):
+        # TODO - prompt for save if profile is dirty.
         self.Close(1)
 
     def showAboutBox(self, evt):

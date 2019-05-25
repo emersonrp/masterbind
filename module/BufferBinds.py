@@ -12,6 +12,8 @@ class BufferBinds(Module):
             'Enabled' : False,
         }
 
+        self.BBinds = []
+
     def MakeTopSizer(self):
         topSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -251,91 +253,92 @@ class BufferBinds(Module):
     #           module.createDialog(buffer,profile)
     #           cbShowDialog(buffer.dlg,218,10,profile,buffer.dlg_close_cb)
 
-        def PopulateBindFiles(profile):
+    def PopulateBindFiles(self):
 
-            ResetFile = profile.Data['ResetFile']
-            Buffer = profile.Buffer or []
-            (afile, bfile, cfile, dfile) = ('','','','')
-            #  for each bindset, create the binds.
-            for bbind in Buffer:
+        profile = self.Profile
 
-                selchat = cbPBindToString(bbind.selchat) if bbind.selchatenabled else ''
-                chat1   = cbPBindToString(bbind.chat1)   if bbind.chat1enabled   else ''
-                chat2   = cbPBindToString(bbind.chat2)   if bbind.chat2enabled   else ''
-                chat3   = cbPBindToString(bbind.chat3)   if bbind.chat3enabled   else ''
+        ResetFile = profile.Data['ResetFile']
+        (afile, bfile, cfile, dfile) = ('','','','')
+        #  for each bindset, create the binds.
+        for bbind in self.BBinds:
 
-                npow = 1
-                if (bbind.power2enabled): npow = 2
-                if (bbind.power3enabled): npow = 3
+            selchat = cbPBindToString(bbind.selchat) if bbind.selchatenabled else ''
+            chat1   = cbPBindToString(bbind.chat1)   if bbind.chat1enabled   else ''
+            chat2   = cbPBindToString(bbind.chat2)   if bbind.chat2enabled   else ''
+            chat3   = cbPBindToString(bbind.chat3)   if bbind.chat3enabled   else ''
 
-                if (bbind.target == 1 or bbind.target == 3):
-                    for j in range(1,8):
-                        teamid = "team" + str(j)
-                        filebase = f"profile.base\\buffi\\bufft{j}"
-                        afile = profile.GetBindFile(f"{filebase}a.txt")
-                        bfile = profile.GetBindFile(f"{filebase}b.txt")
-                        afile.SetBind(    teamid,f'+down teamselect {j} {selchat}bindloadfile {filebase}b.txt')
-                        ResetFile.SetBind(teamid,f'+down teamselect {j} {selchat}bindloadfile {filebase}b.txt')
-                        if (npow == 1):
-                            bfile.SetBind(teamid,f'-down{chat1}powexecname {bbind.power1} bindloadfile {filebase}a.txt')
-                        else:
-                            bfile.SetBind(teamid,f'-down {chat1}powexecname {bbind.power1} bindloadfile {filebase}c.txt')
-                            cfile = profile.GetBindFile(f"{filebase}c.txt")
-                        if (npow == 2):
-                            cfile.SetBind(teamid,f'{chat2}powexecname {bbind.power2} bindloadfile {filebase}a.txt')
-                        else:
-                            dfile = profile.GetBindFile(f"{filebase}d.txt")
-                            cfile.SetBind(teamid,f'+down {chat2}powexecname {bbind.power2}  bindloadfile {filebase}d.txt')
-                            dfile.SetBind(teamid,f'-down {chat3}powexecname {bbind.power3}  bindloadfile {filebase}a.txt')
-                if (bbind.target == 2 or bbind.target == 3):
-                    for j in range(1,6):
-                        petid    = f"pet{j}"
-                        filebase = f"profile.base\\buffi\\buffp{j}"
-                        if bbind.usepetnames:
-                            petaction = profile.petaction[f'pet{j}name']
-                            ResetFile.SetBind(petid,f'+down petselectname {petaction} pet{j}name {selchat}bindloadfile {filebase}b.txt')
-                        else:
-                            petnum = j-1
-                            ResetFile.SetBind(petid,f'+down petselect {petnum} {selchat}bindloadfile {filebase}b.txt')
+            npow = 1
+            if (bbind.power2enabled): npow = 2
+            if (bbind.power3enabled): npow = 3
 
-                        afile = profile.GetBindFile(f"{filebase}a.txt")
-                        bfile = profile.GetBindFile(f"{filebase}b.txt")
-                        if bbind.usepetnames:
-                            petaction = profile.petaction[f'pet{j}name']
-                            afile.SetBind(petid,f'+down petselectname {petaction} {selchat}bindloadfile {filebase}b.txt')
-                        else:
-                            petnum = j-1
-                            afile.SetBind(petid,f'+down petselect {petnum} {selchat}bindloadfile {filebase}b.txt')
+            if (bbind.target == 1 or bbind.target == 3):
+                for j in range(1,8):
+                    teamid = "team" + str(j)
+                    filebase = f"profile.base\\buffi\\bufft{j}"
+                    afile = profile.GetBindFile(f"{filebase}a.txt")
+                    bfile = profile.GetBindFile(f"{filebase}b.txt")
+                    afile.SetBind(    teamid,f'+down teamselect {j} {selchat}bindloadfile {filebase}b.txt')
+                    ResetFile.SetBind(teamid,f'+down teamselect {j} {selchat}bindloadfile {filebase}b.txt')
+                    if (npow == 1):
+                        bfile.SetBind(teamid,f'-down{chat1}powexecname {bbind.power1} bindloadfile {filebase}a.txt')
+                    else:
+                        bfile.SetBind(teamid,f'-down {chat1}powexecname {bbind.power1} bindloadfile {filebase}c.txt')
+                        cfile = profile.GetBindFile(f"{filebase}c.txt")
+                    if (npow == 2):
+                        cfile.SetBind(teamid,f'{chat2}powexecname {bbind.power2} bindloadfile {filebase}a.txt')
+                    else:
+                        dfile = profile.GetBindFile(f"{filebase}d.txt")
+                        cfile.SetBind(teamid,f'+down {chat2}powexecname {bbind.power2}  bindloadfile {filebase}d.txt')
+                        dfile.SetBind(teamid,f'-down {chat3}powexecname {bbind.power3}  bindloadfile {filebase}a.txt')
+            if (bbind.target == 2 or bbind.target == 3):
+                for j in range(1,6):
+                    petid    = f"pet{j}"
+                    filebase = f"profile.base\\buffi\\buffp{j}"
+                    if bbind.usepetnames:
+                        petaction = profile.petaction[f'pet{j}name']
+                        ResetFile.SetBind(petid,f'+down petselectname {petaction} pet{j}name {selchat}bindloadfile {filebase}b.txt')
+                    else:
+                        petnum = j-1
+                        ResetFile.SetBind(petid,f'+down petselect {petnum} {selchat}bindloadfile {filebase}b.txt')
+
+                    afile = profile.GetBindFile(f"{filebase}a.txt")
+                    bfile = profile.GetBindFile(f"{filebase}b.txt")
+                    if bbind.usepetnames:
+                        petaction = profile.petaction[f'pet{j}name']
+                        afile.SetBind(petid,f'+down petselectname {petaction} {selchat}bindloadfile {filebase}b.txt')
+                    else:
+                        petnum = j-1
+                        afile.SetBind(petid,f'+down petselect {petnum} {selchat}bindloadfile {filebase}b.txt')
 
 
-                        if npow == 1:
-                            bfile.SetBind(petid,f'-down {chat1}powexecname bbind.power1 bindloadfile {filebase}a.txt')
-                        else:
-                            bfile.SetBind(petid,f'-down {chat1}powexecname bbind.power1 bindloadfile {filebase}c.txt')
-                            cfile = profile.GetBindFile("{filebase}c.txt")
+                    if npow == 1:
+                        bfile.SetBind(petid,f'-down {chat1}powexecname bbind.power1 bindloadfile {filebase}a.txt')
+                    else:
+                        bfile.SetBind(petid,f'-down {chat1}powexecname bbind.power1 bindloadfile {filebase}c.txt')
+                        cfile = profile.GetBindFile("{filebase}c.txt")
 
-                        if npow == 2:
-                            cfile.SetBind(petid,f'{chat2}powexecname bbind.power2 bindloadfile {filebase}a.txt')
-                        else:
-                            dfile = profile.GetBindFile(f"{filebase}d.txt")
-                            cfile.SetBind(petid,f'+down {chat2}powexecname bbind.power2 bindloadfile           {filebase}d.txt')
-                            dfile.SetBind(petid,f'-down {chat3}powexecname bbind.power3 bindloadfile           {filebase}a.txt')
+                    if npow == 2:
+                        cfile.SetBind(petid,f'{chat2}powexecname bbind.power2 bindloadfile {filebase}a.txt')
+                    else:
+                        dfile = profile.GetBindFile(f"{filebase}d.txt")
+                        cfile.SetBind(petid,f'+down {chat2}powexecname bbind.power2 bindloadfile           {filebase}d.txt')
+                        dfile.SetBind(petid,f'-down {chat3}powexecname bbind.power3 bindloadfile           {filebase}a.txt')
 
-        def findconflicts(profile):
-            ResetFile = profile.Data['ResetFile']
-            Buffer = profile.Buffer
-            for bbind in Buffer:
-                title = bbind.title or 'unknown'
-                if (bbind.target == 1 or bbind.target == 3):
-                    for j in range(1,8):
-                        cbCheckConflict(bbind,f"team{j}","Buff bind title: Team {j} Key")
+    def findconflicts(self):
+        profile = self.Profile
+        ResetFile = profile.Data['ResetFile']
+        for bbind in self.BBinds:
+            title = bbind.title or 'unknown'
+            if (bbind.target == 1 or bbind.target == 3):
+                for j in range(1,8):
+                    cbCheckConflict(bbind,f"team{j}","Buff bind title: Team {j} Key")
 
-                if (bbind.target == 2 or bbind.target == 3):
-                    for j in range(1,6):
-                            cbCheckConflict(bbind,f"pet{j}","Buff bind title: Pet {j} Key")
+            if (bbind.target == 2 or bbind.target == 3):
+                for j in range(1,6):
+                        cbCheckConflict(bbind,f"pet{j}","Buff bind title: Pet {j} Key")
 
-        def bindisused(profile):
-            True if profile.Buffer else False
+    def bindisused(self):
+        True if self.BBinds else False
 
 
     def AddNewBind(self):

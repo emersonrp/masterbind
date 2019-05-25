@@ -66,8 +66,8 @@ class ChatBinds(Module):
 
         self.topSizer = topSizer
 
-    def PopulateBindfiles(self):
-        ResetFile = self.Profile.General['ResetFile']
+    def PopulateBindFiles(self):
+        ResetFile = self.Profile.Data['ResetFile']
 
         Notifier = self.Data['TypingNotifier']
         if Notifier: Notifier = f"$${Notifier}"

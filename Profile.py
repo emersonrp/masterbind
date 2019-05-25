@@ -257,27 +257,37 @@ class Profile(wx.Panel):
         'ResetFeedback' : 'Give Feedback on Reset',
     })
 
-    # TODO - hacking together the catfile() by hand here seems ugly.
     def GetBindFile(self, *args):
         filename = str(Path(*args))
 
         # TODO - check / etc actual filename
         #my $filename = File::Spec->catfile(@filename)
         if not self.BindFiles.get(filename, ''):
-            print(f"No bindfile for name {filename}, creating...")
+            #print(f"No bindfile for name {filename}, creating...")
 
             import re
             if re.match(r'$$', filename):
-                print("WTF IS THIS {filename}")
-                raise Error
+                raise Exception(f"Got weird bindfile filename { filename }")
             self.BindFiles[filename] = BindFile(self, filename)
 
         return self.BindFiles[filename]
 
     def WriteBindFiles(self, evt):
-        for module in self.Modules:
+        title = 'Populating Bind Files'
+        dialog = wx.ProgressDialog(title, title, maximum = len(self.Modules),
+                parent = self, style = wx.PD_APP_MODAL|wx.PD_AUTO_HIDE)
+        dialog.CentreOnScreen()
+        for i, module in enumerate(self.Modules):
             module.PopulateBindFiles()
+            dialog.Update(i)
+        dialog.Destroy()
 
-        for bindfile in self.BindFiles:
-            self.BindFiles[bindfile].Write()
+        title = 'Writing Bind Files'
+        dialog = wx.ProgressDialog(title, title, maximum = len(self.BindFiles.keys()),
+                parent = self, style = wx.PD_APP_MODAL|wx.PD_AUTO_HIDE)
+        dialog.CentreOnScreen()
+        for i, bindfile in enumerate(self.BindFiles.values()):
+            bindfile.Write()
+            dialog.Update(i)
+        dialog.Destroy()
 

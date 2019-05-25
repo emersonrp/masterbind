@@ -204,7 +204,7 @@ class ComplexBinds(Module):
     def PopulateBindFiles(thing):
         profile = thing.Profile
         ResetFile = profile.Data['ResetFile']
-        cbinds = profile['cbinds'] or []
+        cbinds = profile.Data.get('cbinds', [])
 
         (cbindfile, maxK, maxC) = ('', 0, 0)
         for k in range(1, len(cbinds)):   # for each complex bind set...

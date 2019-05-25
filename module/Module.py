@@ -8,6 +8,7 @@ class Module(wx.Dialog):
         self.Profile = parent
 
         self.Data = {}
+        self.ModuleEnabled = False
 
         self.ButtonTitle = name
         self.HelpWindow = None
@@ -17,6 +18,7 @@ class Module(wx.Dialog):
         self.MakeTopSizer()
 
         self.SetSizerAndFit(self.topSizer)
+        self.CenterOnParent()
 
         self.MakeControls()
         parent.Modules.append(self)
@@ -37,13 +39,13 @@ class Module(wx.Dialog):
         self.HelpWindow.Toggle()
 
     def MakeTopSizer(self):
-        raise Exception(f"MakeTopSizer not implemented in {self.Name}")
+        raise NotImplementedError(f"MakeTopSizer not implemented in {self.Name}")
 
     def InitKeys(self):
-        raise Exception(f"InitKeys not implemented in {self.Name}")
+        raise NotImplementedError(f"InitKeys not implemented in {self.Name}")
 
     def PopulateBindFiles(self):
-        raise Exception(f"PopulateBindFiles not implemented in {self.Name}")
+        raise NotImplementedError(f"PopulateBindFiles not implemented in {self.Name}")
 
     def HelpText(self):
         'Help not currently implemented here'
@@ -53,7 +55,7 @@ class Module(wx.Dialog):
         self.enableCB = wx.CheckBox(self.Profile)
         self.confbtn  = wx.Button(self.Profile, label = self.ButtonTitle)
 
-        self.enableCB.SetValue( self.Data['Enabled'] )
+        self.enableCB.SetValue( self.ModuleEnabled )
         self.enableModule()
 
         self.enableCB.Bind(wx.EVT_CHECKBOX, self.enableModule)
@@ -64,7 +66,7 @@ class Module(wx.Dialog):
 
     def enableModule(self, evt=None):
         enabled = self.enableCB.IsChecked()
-        self.Data['Enabled'] = enabled
+        self.ModuleEnabled = enabled
         self.confbtn.Enable(enabled)
 
     def doShow(self, evt):

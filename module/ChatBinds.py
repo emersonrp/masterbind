@@ -16,8 +16,6 @@ class ChatBinds(Module):
         self.TabTitle = 'Chat Binds'
 
         self.Data = {
-            'Enabled'              : True,
-
             'Message'              : "afk Typing Message",
             'StartChat'            : 'ENTER',
             'SlashChat'            : '/',
@@ -28,6 +26,8 @@ class ChatBinds(Module):
             'TypingNotifierEnable' : 1,
             'TypingNotifier'       : '',
         }
+
+        self.ModuleEnabled = True
 
     def MakeTopSizer(self):
 

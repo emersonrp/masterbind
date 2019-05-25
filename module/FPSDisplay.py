@@ -7,10 +7,9 @@ class FPSDisplay(Module):
 
     def InitKeys(self):
         self.Data = {
-            'Enabled' : True,
-
             'Bindkey': "P",
         }
+        self.ModuleEnabled = True
 
     def MakeTopSizer(self):
 

@@ -10,7 +10,6 @@ class ComplexBinds(Module):
 
     def InitKeys(self):
         self.Data = {
-            'Enabled' : False,
         }
 
     def MakeTopSizer(self):

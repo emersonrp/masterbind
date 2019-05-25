@@ -11,8 +11,6 @@ class TeamPetSelect(Module):
     def InitKeys(self):
         if not self.Data:
             self.Data = {
-                'Enabled'     : True,
-
                 'TPSEnable'   : 1,
                 'TPSSelMode'  : '',
                 'TeamSelect1' : 'UNBOUND',

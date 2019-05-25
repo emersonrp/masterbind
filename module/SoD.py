@@ -16,8 +16,6 @@ class SoD(Module):
 
     def InitKeys(self):
         self.Data = {
-            'Enabled' : True,
-
             'Up'            : "SPACE",
             'Down'          : "X",
             'Forward'       : "W",
@@ -98,6 +96,8 @@ class SoD(Module):
             'TempTrayToggle' : "UNBOUND",
             'TempMode'       : "UNBOUND",
         }
+
+        self.ModuleEnabled = True
 
         if self.Profile.Data['Archetype'] == "Peacebringer":
             self.Data['NovaNova'] = "Bright Nova"

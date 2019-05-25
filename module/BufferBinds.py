@@ -8,9 +8,7 @@ class BufferBinds(Module):
         Module.__init__(self, parent, 'Buffer Binds')
 
     def InitKeys(self):
-        self.Data = {
-            'Enabled' : False,
-        }
+        self.Data = { }
 
         self.BBinds = []
 

@@ -11,8 +11,6 @@ class InspirationPopper(Module):
     def InitKeys(self):
 
         self.Data = {
-            'Enabled'         : True,
-
             'InspEnabled'     : True,
             'RevInspEnabled'  : True,
 

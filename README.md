@@ -1,3 +1,9 @@
+<b>masterbind has been deprecated.</b>
+
+The work on masterbind has been continued and greatly expanded in [bindcontrol](https://github.com/emersonrp/bindcontrol).  Please check it out.
+
+<hr>
+
 This is something between a clone and a port of CityBinder
 (http://sourceforge.net/projects/citybinder/), using the Wx Widget UI toolkit
 so that it's cross-platform, and using python because that's the way I roll.

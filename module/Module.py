@@ -62,7 +62,7 @@ class Module(wx.Dialog):
         self.confbtn .Bind(wx.EVT_BUTTON,   self.doShow)
 
         self.Profile.moduleSizer.Add(self.enableCB, 0, wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL)
-        self.Profile.moduleSizer.Add(self.confbtn,  1, wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
+        self.Profile.moduleSizer.Add(self.confbtn,  1, wx.ALIGN_CENTER|wx.ALIGN_CENTER_VERTICAL)
 
     def enableModule(self, evt=None):
         enabled = self.enableCB.IsChecked()
